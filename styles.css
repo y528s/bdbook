@@ -82,6 +82,15 @@ body::before{
 .hero h1 .dot{color:var(--teal-deep);font-style:normal;}
 .hero .sub{font-family:var(--display);font-style:italic;font-size:clamp(20px,4.6vw,30px);color:var(--ink-soft);margin:22px 0 0;}
 .hero .blessing{margin:30px auto 0;max-width:560px;font-size:18px;color:var(--ink-soft);}
+.hero-feature{margin:36px auto 0;max-width:620px;padding:0 6px;}
+.hero-feature img{
+  width:100%;height:auto;display:block;border-radius:16px;
+  border:5px solid #fff;box-shadow:var(--shadow-lg);background:var(--cream-deep);
+}
+.hero-feature figcaption{
+  font-family:var(--display);font-style:italic;font-size:16px;color:var(--ink-soft);
+  margin-top:14px;letter-spacing:.01em;
+}
 .hero-photos{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:26px auto 4px;max-width:720px;}
 .hero-photos .hp{
   width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:center 28%;
