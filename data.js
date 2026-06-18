@@ -132,7 +132,9 @@ const MESSAGES = [
   {name:"Emily", loc:"Brighton & Hove",
    text:"Dear Rachelle, Happy 75th Birthday! When I think of you, I always remember the time we went to Brent Cross when I was 18. We had such a nice time and you always made me feel so welcome when I came to Manchester. Now the same happens in Brighton (including gluten free cinnamon buns on the train!). I hope you have a really wonderful birthday and a happy, healthy year ahead. Lots of love, Emily xxx"},
   {name:"Leah Topas", loc:"Baltimore, USA", photos:["assets/baltimore.jpg"], photoPos:"center 32%",
-   text:"Our dearest Yaya, Rachelle, Corinne.. we met under the oddest of circumstances in Baltimore years ago. One of those lucky coincidences that betters one's life. Thank you always for being you. Wishing you the happiest of birthdays in the best of health and happiness."}
+   text:"Our dearest Yaya, Rachelle, Corinne.. we met under the oddest of circumstances in Baltimore years ago. One of those lucky coincidences that betters one's life. Thank you always for being you. Wishing you the happiest of birthdays in the best of health and happiness."},
+  {name:"Daniella",
+   text:"Happy Birthday Yaya! I hope your day is filled with love, joy, and all the things that make you smile. I wanted to take a moment to tell you how much your thoughtful gifts over the years have meant to me. I wear the black bracelet that you gave me at Leora’s Bat Mitzvah almost everyday (to ward away negative energy)! You always have a special way of choosing things that make me feel seen and appreciated, and I am truly grateful for all that you do for your family. Wishing you a beautiful year ahead filled with health, happiness, and many more blessings. — Daniella."}
 ];
 
 const LOCATIONS = [
