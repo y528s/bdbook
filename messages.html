@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Messages · Rachelle Silver · 75</title>
+<meta name="description" content="Messages of love for Rachelle (Corinne) Silver's 75th birthday." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="site-head">
+  <a class="brand" href="index.html">Rachelle <span class="b-dot">·</span> 75</a>
+  <nav class="site-nav" aria-label="Main">
+    <a href="index.html">Home</a>
+    <a href="messages.html" class="active">Messages</a>
+    <a href="photos.html">Photos</a>
+    <a href="map.html">Map</a>
+  </nav>
+</header>
+
+<div class="index-bar">
+  <div class="row" id="azGroup" aria-label="Jump to a name"></div>
+  <div class="row numrow" id="numRow" aria-label="Jump to a message by number"></div>
+</div>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">In their own words</p>
+      <h2>Messages for Corinne</h2>
+      <p>Tap a letter or number above to find someone.</p>
+    </div>
+    <div class="messages" id="messagesGrid"></div>
+  </div>
+</section>
+
+<!-- print-only photo gallery, appended to the PDF after the messages -->
+<section class="block print-gallery" id="printGallery" aria-hidden="true">
+  <div class="wrap">
+    <div class="section-head"><h2>Photos</h2></div>
+    <div class="gallery" id="printGalleryGrid"></div>
+  </div>
+</section>
+
+<footer>
+  <p class="fdiamonds">◆ ◆ ◆</p>
+  <p class="heb">Ad Meah V'Esrim<span class="rtl" dir="rtl" lang="he">עד מאה ועשרים</span></p>
+  <p class="made">Created with love by Yosef Silver · June 2026</p>
+</footer>
+
+<script src="data.js"></script>
+<script src="lightbox.js"></script>
+<script>
+const messagesGrid = document.getElementById('messagesGrid');
+
+function toParagraphs(text){
+  const explicit = text.split(/\n\s*\n|\r?\n/).map(s=>s.trim()).filter(Boolean);
+  if(explicit.length>1) return explicit;
+  const t = text.trim();
+  if(t.length < 300) return [t];
+  const parts = t.match(/.*?[.!?…]+["'’)\]]*[\s]+|.+$/g) || [t];
+  const paras=[]; let cur='';
+  for(const s of parts){
+    cur += s;
+    if(cur.trim().length >= 260){ paras.push(cur.trim()); cur=''; }
+  }
+  if(cur.trim()){
+    if(paras.length && cur.trim().length < 130) paras[paras.length-1] += ' ' + cur.trim();
+    else paras.push(cur.trim());
+  }
+  return paras.length ? paras : [t];
+}
+
+function buildCard(m){
+  const card = document.createElement('article');
+  card.className='msg'+(m.poem?' poem':'');
+  card.id=m.id;
+
+  let html = '<span class="msg-num" aria-hidden="true">'+(m.index+1)+'</span>';
+
+  const photos = m.photos||[];
+  const pos = m.photoPos ? ' style="object-position:'+m.photoPos+'"' : '';
+  if(photos.length>=1){
+    const gi0 = ALL_PHOTOS.findIndex(p=>p.src===photos[0]);
+    html += '<div class="photo-container msg-photo" data-gi="'+gi0+'"><div class="ar"><img loading="lazy" src="'+photos[0]+'"'+pos+' alt="Photo from '+m.name+'" onerror="this.closest(\'.photo-container\').style.display=\'none\'"></div></div>';
+  }
+
+  const safe=m.text.replace(/</g,'&lt;');
+  const paras = m.poem ? [safe] : toParagraphs(safe);
+  html += '<div class="msg-text" dir="auto">'+paras.map(p=>'<p>'+p+'</p>').join('')+'</div>';
+
+  if(photos.length>1){
+    html += '<div class="thumb-row">';
+    photos.slice(1).forEach(src=>{
+      const gi = ALL_PHOTOS.findIndex(p=>p.src===src);
+      html += '<div class="photo-container" data-gi="'+gi+'"><img loading="lazy" src="'+src+'" alt="More from '+m.name+'" onerror="this.closest(\'.photo-container\').style.display=\'none\'"></div>';
+    });
+    html += '</div>';
+  }
+
+  html += '<div class="msg-sig"><span class="sig-dash">◆</span><h3 class="msg-name">'+m.name+'</h3>';
+  if(m.loc) html += '<p class="msg-loc">'+m.loc+'</p>';
+  html += '</div>';
+
+  card.innerHTML=html;
+  card.querySelectorAll('[data-gi]').forEach(el=>{
+    el.addEventListener('click',()=>openLightbox(parseInt(el.dataset.gi,10)));
+  });
+  return card;
+}
+
+MESSAGES.forEach(m=>messagesGrid.appendChild(buildCard(m)));
+
+function headerH(){return document.querySelector('.site-head').offsetHeight + document.querySelector('.index-bar').offsetHeight;}
+
+function jumpTo(idx, letter){
+  document.querySelectorAll('.azletter').forEach(b=>b.classList.toggle('cur', b.dataset.letter===letter));
+  document.querySelectorAll('.numbtn').forEach(b=>b.classList.toggle('cur', +b.dataset.num===idx));
+  const el=document.getElementById(MESSAGES[idx].id);
+  if(el){
+    el.classList.add('flash');
+    window.scrollTo({top:Math.max(0, el.offsetTop - headerH() - 14), behavior:'smooth'});
+    setTimeout(()=>el.classList.remove('flash'),2000);
+  }
+}
+
+// A–Z index
+const azGroup = document.getElementById('azGroup');
+const letterFirst = {};
+MESSAGES.forEach((m,i)=>{
+  const L=(m.name.trim()[0]||'').toUpperCase();
+  if(/[A-Z]/.test(L) && !(L in letterFirst)) letterFirst[L]=i;
+});
+for(let i=65;i<=90;i++){
+  const L=String.fromCharCode(i);
+  if(L in letterFirst){
+    const b=document.createElement('button');
+    b.className='azletter';b.textContent=L;b.dataset.letter=L;
+    b.setAttribute('aria-label','Jump to names starting with '+L);
+    b.addEventListener('click',()=>jumpTo(letterFirst[L],L));
+    azGroup.appendChild(b);
+  }
+}
+
+// numbered index
+const numRow = document.getElementById('numRow');
+MESSAGES.forEach((m,i)=>{
+  const b=document.createElement('button');
+  b.className='numbtn';b.textContent=(i+1);b.dataset.num=i;
+  b.setAttribute('aria-label','Jump to message '+(i+1)+', '+m.name);
+  b.addEventListener('click',()=>jumpTo(i));
+  numRow.appendChild(b);
+});
+
+// arrive from Home's "Save as PDF" button
+// build the print-only gallery so the PDF includes every photo after the messages
+(function(){
+  const grid=document.getElementById('printGalleryGrid');
+  ALL_PHOTOS.forEach(p=>{
+    const fig=document.createElement('figure');
+    fig.className='photo-container';
+    fig.innerHTML='<div class="ar"><img loading="lazy" src="'+p.src+'" alt="Photo shared by '+p.name+'" onerror="this.closest(\'.photo-container\').style.display=\'none\'"></div><figcaption class="cap">'+p.name+'</figcaption>';
+    grid.appendChild(fig);
+  });
+})();
+
+if(new URLSearchParams(location.search).get('print')==='1'){
+  setTimeout(()=>window.print(), 700);
+}
+</script>
+</body>
+</html>

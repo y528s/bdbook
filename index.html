@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Rachelle Silver · 75 — With Love From Around the World</title>
+<meta name="description" content="A birthday tribute to Rachelle (Corinne) Silver on her 75th — Brighton & Hove, 18th June 2026." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="site-head">
+  <a class="brand" href="index.html">Rachelle <span class="b-dot">·</span> 75</a>
+  <nav class="site-nav" aria-label="Main">
+    <a href="index.html" class="active">Home</a>
+    <a href="messages.html">Messages</a>
+    <a href="photos.html">Photos</a>
+    <a href="map.html">Map</a>
+  </nav>
+</header>
+
+<header class="hero">
+  <p class="diamonds">◆ ◆ ◆</p>
+  <h1>Rachelle Silver <span class="dot">·</span> 75</h1>
+  <p class="sub">Brighton &amp; Hove · 18th June 2026</p>
+  <div class="hero-photos" id="heroPhotos" aria-hidden="true"></div>
+  <div class="hr-diamonds">◆</div>
+  <p class="blessing">A garden of messages, gathered from Brighton to Jerusalem, Manchester to Kansas City — every one of them carrying the same wish: <em>ad meah v'esrim</em>, with love.</p>
+</header>
+
+<nav class="home-cards" aria-label="Explore">
+  <a class="home-card" href="messages.html">
+    <span class="hc-mark">✍</span>
+    <h3>Messages</h3>
+    <p id="msgCount">Notes of love, laughter and gratitude from friends and family.</p>
+  </a>
+  <a class="home-card" href="photos.html">
+    <span class="hc-mark">❖</span>
+    <h3>Photos</h3>
+    <p>A gallery of moments shared across the years.</p>
+  </a>
+  <a class="home-card" href="map.html">
+    <span class="hc-mark">◆</span>
+    <h3>Map</h3>
+    <p>From around the world, with love — see where everyone is writing from.</p>
+  </a>
+</nav>
+
+<div class="pdf-wrap">
+  <button class="pdf-btn" id="pdfBtn" type="button" aria-label="Save this tribute as a PDF keepsake">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+    Save the messages as a PDF keepsake
+  </button>
+</div>
+
+<footer>
+  <p class="fdiamonds">◆ ◆ ◆</p>
+  <p class="heb">Ad Meah V'Esrim<span class="rtl" dir="rtl" lang="he">עד מאה ועשרים</span></p>
+  <p class="made">Created with love by Yosef Silver · June 2026</p>
+</footer>
+
+<script src="data.js"></script>
+<script>
+// hero photo band — a curated, evenly-spread selection of the senders' photos
+(function(){
+  const host=document.getElementById('heroPhotos');
+  if(host && ALL_PHOTOS.length){
+    const MAX=Math.min(ALL_PHOTOS.length, 18);
+    const stepN=Math.max(1, Math.floor(ALL_PHOTOS.length/MAX));
+    const picks=[];
+    for(let i=0;i<ALL_PHOTOS.length && picks.length<MAX;i+=stepN) picks.push(ALL_PHOTOS[i]);
+    picks.forEach(p=>{
+      const img=new Image();
+      img.className='hp';img.loading='lazy';img.src=p.src;img.alt='';
+      img.onerror=()=>img.remove();
+      host.appendChild(img);
+    });
+  }
+  document.getElementById('msgCount').textContent =
+    MESSAGES.length + ' notes of love, laughter and gratitude from friends and family.';
+  // PDF button → open the messages page's print view
+  document.getElementById('pdfBtn').addEventListener('click',()=>{
+    window.location.href='messages.html?print=1';
+  });
+})();
+</script>
+</body>
+</html>

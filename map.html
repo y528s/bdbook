@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Map · Rachelle Silver · 75</title>
+<meta name="description" content="Where the messages came from — a world map for Rachelle (Corinne) Silver's 75th birthday." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="site-head">
+  <a class="brand" href="index.html">Rachelle <span class="b-dot">·</span> 75</a>
+  <nav class="site-nav" aria-label="Main">
+    <a href="index.html">Home</a>
+    <a href="messages.html">Messages</a>
+    <a href="photos.html">Photos</a>
+    <a href="map.html" class="active">Map</a>
+  </nav>
+</header>
+
+<section class="block" style="background:var(--cream-deep);">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Friends &amp; family everywhere</p>
+      <h2>From around the world, with love</h2>
+    </div>
+    <div class="map-card">
+      <svg id="worldmap" viewBox="0 0 960 480" preserveAspectRatio="xMidYMid meet" role="img" aria-label="World map showing where messages came from"></svg>
+    </div>
+    <div class="map-legend" id="mapLegend"></div>
+  </div>
+</section>
+
+<footer>
+  <p class="fdiamonds">◆ ◆ ◆</p>
+  <p class="heb">Ad Meah V'Esrim<span class="rtl" dir="rtl" lang="he">עד מאה ועשרים</span></p>
+  <p class="made">Created with love by Yosef Silver · June 2026</p>
+</footer>
+
+<div class="map-tip" id="mapTip"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<script src="data.js"></script>
+<script>
+const mapLegend = document.getElementById('mapLegend');
+const tip = document.getElementById('mapTip');
+
+(function drawMap(){
+  const W=960,H=480;
+  const svg = d3.select('#worldmap');
+  const projection = d3.geoNaturalEarth1().scale(175).translate([W/2,H/2+10]);
+  const path = d3.geoPath(projection);
+
+  d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(world=>{
+    const countries = topojson.feature(world,world.objects.countries).features;
+    svg.append('g').selectAll('path')
+      .data(countries).enter().append('path')
+      .attr('class','country').attr('d',path);
+
+    const g = svg.append('g');
+    LOCATIONS.forEach(loc=>{
+      const xy = projection(loc.coord);
+      if(!xy) return;
+      g.append('circle').attr('class','pin-ring').attr('cx',xy[0]).attr('cy',xy[1]).attr('r',12);
+      const c = g.append('circle').attr('class','pin').attr('cx',xy[0]).attr('cy',xy[1]).attr('r',6);
+      c.on('mousemove',ev=>showTip(ev,loc))
+       .on('mouseenter',()=>c.attr('r',8))
+       .on('mouseleave',()=>{c.attr('r',6);hideTip();})
+       .on('touchstart',ev=>{ev.preventDefault();showTip(ev.touches[0],loc);},{passive:false});
+    });
+  }).catch(()=>{
+    document.querySelector('.map-card').innerHTML='<p style="text-align:center;padding:40px;color:var(--ink-soft)">The map could not load right now — please check your connection and refresh.</p>';
+  });
+
+  LOCATIONS.forEach(loc=>{
+    const s=document.createElement('span');
+    s.innerHTML='<i></i>'+loc.city.split(',')[0];
+    mapLegend.appendChild(s);
+  });
+})();
+
+function showTip(ev,loc){
+  tip.innerHTML='<b>'+loc.city+'</b><br>'+loc.names.join(' · ');
+  tip.style.opacity='1';
+  let x=ev.clientX, y=ev.clientY-14;
+  tip.style.left=Math.min(Math.max(x,140),window.innerWidth-140)+'px';
+  tip.style.top=y+'px';
+  tip.style.transform='translate(-50%,-100%)';
+}
+function hideTip(){tip.style.opacity='0';}
+document.addEventListener('touchstart',e=>{
+  if(!e.target.closest('#worldmap')) hideTip();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Photos · Rachelle Silver · 75</title>
+<meta name="description" content="A gallery of photos shared for Rachelle (Corinne) Silver's 75th birthday." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="site-head">
+  <a class="brand" href="index.html">Rachelle <span class="b-dot">·</span> 75</a>
+  <nav class="site-nav" aria-label="Main">
+    <a href="index.html">Home</a>
+    <a href="messages.html">Messages</a>
+    <a href="photos.html" class="active">Photos</a>
+    <a href="map.html">Map</a>
+  </nav>
+</header>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Through the years</p>
+      <h2>A life full of colour</h2>
+      <p>Tap any photo to see it larger.</p>
+    </div>
+    <div class="gallery" id="galleryGrid"></div>
+  </div>
+</section>
+
+<footer>
+  <p class="fdiamonds">◆ ◆ ◆</p>
+  <p class="heb">Ad Meah V'Esrim<span class="rtl" dir="rtl" lang="he">עד מאה ועשרים</span></p>
+  <p class="made">Created with love by Yosef Silver · June 2026</p>
+</footer>
+
+<script src="data.js"></script>
+<script src="lightbox.js"></script>
+<script>
+const galleryGrid = document.getElementById('galleryGrid');
+ALL_PHOTOS.forEach((p,i)=>{
+  const fig = document.createElement('figure');
+  fig.className='photo-container';
+  fig.tabIndex=0;
+  const pos = ' object-position:center 30%;';
+  fig.innerHTML =
+    '<div class="ar"><img loading="lazy" src="'+p.src+'" alt="Photo shared by '+p.name+'" onerror="this.closest(\'.photo-container\').style.display=\'none\'"></div>'+
+    '<figcaption class="cap">'+p.name+'</figcaption>';
+  fig.addEventListener('click',()=>openLightbox(i));
+  fig.addEventListener('keydown',e=>{if(e.key==='Enter'){openLightbox(i);}});
+  galleryGrid.appendChild(fig);
+});
+</script>
+</body>
+</html>
