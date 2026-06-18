@@ -72,7 +72,7 @@ const MESSAGES = [
   {name:"Eliana Silver", loc:"Hove · Family", photos:[B44b+"ef012fc2d_IMG_6754.jpeg",B44b+"3c2a114bc_IMG_6641.jpeg",B44b+"ff7eb0897_IMG_6572.jpeg",B44b+"a68e953e6_IMG_0245.jpeg"],
    text:"Dear Yaya, I have so many amazing memories with you. I love seeing you and talking to you. One of my favourite memories with you is when I broke my foot — you were there always helping and being kind. Thank you so much for that. I love you. Happy birthday."},
   {name:"Eitan Silver", loc:"Hove · Family",
-   text:"Happy birthday Yaya, I had a great time seeing you in England this year and I am so glad I could be here for such a big birthday for you. I wish you a lifetime of health, success, and not having to see David Bronstein. Happy birthday Yaya, I love you. ❤️"},
+   text:"Happy birthday Yaya, I had a great time seeing you in England this year and I am so glad I could be here for such a big birthday for you. I wish you a lifetime of health and success. Happy birthday Yaya I love you"},
   {name:"Rina Shoshana Vile", loc:"Israel",
    text:"Dear Rachelle, Many blessings to you on your special birthday, from beautiful Bat Ayin in beautiful Eretz Yisrael... to a beautiful person! Blessings for many more healthy and happy years! Love, Rina Shoshana Vile."},
   {name:"Naomi and Josh",
