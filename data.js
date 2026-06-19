@@ -134,7 +134,19 @@ const MESSAGES = [
   {name:"Leah Topas", loc:"Baltimore, USA", photos:["assets/baltimore.jpg"], photoPos:"center 32%",
    text:"Our dearest Yaya, Rachelle, Corinne.. we met under the oddest of circumstances in Baltimore years ago. One of those lucky coincidences that betters one's life. Thank you always for being you. Wishing you the happiest of birthdays in the best of health and happiness."},
   {name:"Daniella", photos:["assets/daniella-family.jpeg"], photoPos:"center 30%",
-   text:"Happy Birthday Yaya! I hope your day is filled with love, joy, and all the things that make you smile. I wanted to take a moment to tell you how much your thoughtful gifts over the years have meant to me. I wear the black bracelet that you gave me at Leora’s Bat Mitzvah almost everyday (to ward away negative energy)! You always have a special way of choosing things that make me feel seen and appreciated, and I am truly grateful for all that you do for your family. Wishing you a beautiful year ahead filled with health, happiness, and many more blessings. — Daniella."}
+   text:"Happy Birthday Yaya! I hope your day is filled with love, joy, and all the things that make you smile. I wanted to take a moment to tell you how much your thoughtful gifts over the years have meant to me. I wear the black bracelet that you gave me at Leora’s Bat Mitzvah almost everyday (to ward away negative energy)! You always have a special way of choosing things that make me feel seen and appreciated, and I am truly grateful for all that you do for your family. Wishing you a beautiful year ahead filled with health, happiness, and many more blessings. — Daniella."},
+  {name:"Anna & Benjy", date:"2026-06-18",
+   text:"Mazaltov and happy birthday from Anna and Benjy, with happy memories of Tewkesbury Drive!"},
+  {name:"Norman & Mimi", date:"2026-06-18",
+   text:"Happy birthday and mazel tov. Wishing you a wonderful year filled with brochos. Best wishes, Norman & Mimi."},
+  {name:"Md", date:"2026-06-18",
+   text:"Mazeltov! Many healthy years — and lots of tangerines!"},
+  {name:"Naomi Tabor", date:"2026-06-18",
+   text:"Happy birthday 💗🎈🎉🎂 Have a wonderful day. Lots of love from all the Tabors. xxx"},
+  {name:"Rachel Snow-Miller", date:"2026-06-18",
+   text:"Your mum is one of the most remarkable women I know. Her home and heart are always open. From the day I met her she made me feel like a long lost sister — with warmth, a good meal and an ear to listen. There is always time for you with Corinne/Rachelle; whether you're near her or miles away, friendship is timeless and free from distance. I'm so proud of you as a friend and so happy you're in my life. All the little things you do add up and make you one wonderful, fabulous friend indeed. Happy happy birthday and please Gd to many more x — Rachel Snow-Miller"},
+  {name:"Dana, David & Yair Horesh", date:"2026-06-18",
+   text:"May this 76th year be as beautiful as you are. May you be blessed with health, love, friendship, family, simchas, and purpose. May the road rise up to meet you and may the sun warm your face. Love always, Dana, David and Yair Horesh."}
 ];
 
 const LOCATIONS = [
@@ -152,6 +164,13 @@ const LOCATIONS = [
 MESSAGES.sort((a,b)=>a.name.replace(/[^a-zA-Z]/g,'').toLowerCase()
   .localeCompare(b.name.replace(/[^a-zA-Z]/g,'').toLowerCase()));
 MESSAGES.forEach((m,i)=>{ m.id=slug(m.name); m.index=i; });
+
+/* submission dates: the most recent date present marks the latest arrivals so
+   they can be surfaced and filtered. Messages without a date belong to the
+   original collection. */
+const MESSAGE_DATES = MESSAGES.map(m=>m.date).filter(Boolean).sort();
+const LATEST_MESSAGE_DATE = MESSAGE_DATES.length ? MESSAGE_DATES[MESSAGE_DATES.length-1] : null;
+MESSAGES.forEach(m=>{ m.isNew = !!(m.date && m.date === LATEST_MESSAGE_DATE); });
 
 const ALL_PHOTOS = [];
 MESSAGES.forEach(m=>{ (m.photos||[]).forEach(src=>ALL_PHOTOS.push({src,name:m.name})); });

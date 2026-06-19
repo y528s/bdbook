@@ -191,6 +191,22 @@ section.block{padding:48px 0 56px;}
 
 /* ============ MESSAGES ============ */
 .messages{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:26px;}
+/* ============ MESSAGE FILTER / ORDER CONTROLS ============ */
+.msg-controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;max-width:760px;margin:0 auto 34px;}
+.msg-controls .chips{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{font-family:var(--body-font);font-size:14px;font-weight:700;color:var(--ink-soft);background:var(--card);
+  border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s,color .15s,border-color .15s;}
+.chip:hover{border-color:var(--teal-deep);}
+.chip.cur{background:var(--crimson);color:var(--cream);border-color:var(--crimson);}
+.chip-new{color:var(--teal-deep);}
+.chip-new.cur{background:var(--teal-deep);color:var(--cream);border-color:var(--teal-deep);}
+.chip .chip-n{font-size:12px;opacity:.82;font-style:italic;}
+.sortwrap{font-size:12px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.1em;display:inline-flex;align-items:center;gap:9px;}
+.sortwrap select{font-family:var(--body-font);font-size:14px;font-weight:700;color:var(--ink);background:var(--card);
+  border:1px solid var(--line);border-radius:9px;padding:7px 11px;cursor:pointer;text-transform:none;letter-spacing:0;}
+.new-flag{position:absolute;top:-13px;right:18px;background:var(--teal-deep);color:var(--cream);font-size:12px;font-weight:700;
+  letter-spacing:.03em;padding:5px 12px;border-radius:999px;box-shadow:var(--shadow);border:2px solid var(--card);}
+
 .msg{
   break-inside:avoid;position:relative;background:var(--card);border-radius:14px;border-top:4px solid var(--crimson);
   box-shadow:var(--shadow);padding:26px 26px 28px;margin:0 0 26px;scroll-margin-top:150px;
@@ -267,7 +283,7 @@ footer .fdiamonds{color:var(--teal);letter-spacing:.6em;font-size:16px;margin:0 
 @media print{
   @page{size:A4;margin:16mm 14mm;}
   html,body{background:#fff!important;}
-  .site-head,.index-bar,.lightbox,.pdf-btn,.pdf-wrap,.home-cards,.msg-num{display:none!important;}
+  .site-head,.index-bar,.lightbox,.pdf-btn,.pdf-wrap,.home-cards,.msg-num,.msg-controls,.new-flag{display:none!important;}
   .hero{padding:0 0 18px!important;}
   .hero h1{font-size:40pt!important;}
   .messages{display:block!important;}

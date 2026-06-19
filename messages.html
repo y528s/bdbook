@@ -34,6 +34,18 @@
       <h2>Messages for Corinne</h2>
       <p>Tap a letter or number above to find someone.</p>
     </div>
+    <div class="msg-controls" id="msgControls">
+      <div class="chips" role="group" aria-label="Filter messages">
+        <button class="chip cur" data-filter="all" type="button">All</button>
+        <button class="chip chip-new" data-filter="new" type="button">✦ Just added</button>
+      </div>
+      <label class="sortwrap">Order
+        <select id="sortSelect" aria-label="Order messages">
+          <option value="az">A–Z</option>
+          <option value="new">Newest first</option>
+        </select>
+      </label>
+    </div>
     <div class="messages" id="messagesGrid"></div>
   </div>
 </section>
@@ -81,6 +93,7 @@ function buildCard(m){
   card.id=m.id;
 
   let html = '<span class="msg-num" aria-hidden="true">'+(m.index+1)+'</span>';
+  if(m.isNew) html += '<span class="new-flag">✦ Just added</span>';
 
   const photos = m.photos||[];
   const pos = m.photoPos ? ' style="object-position:'+m.photoPos+'"' : '';
@@ -115,9 +128,47 @@ function buildCard(m){
 
 MESSAGES.forEach(m=>messagesGrid.appendChild(buildCard(m)));
 
+// ---- filter & order controls ----
+const msgControls = document.getElementById('msgControls');
+const sortSelect = document.getElementById('sortSelect');
+const chips = [...msgControls.querySelectorAll('.chip')];
+const newCount = MESSAGES.filter(m=>m.isNew).length;
+msgControls.querySelector('[data-filter="all"]').innerHTML = 'All <span class="chip-n">'+MESSAGES.length+'</span>';
+msgControls.querySelector('[data-filter="new"]').innerHTML = '✦ Just added <span class="chip-n">'+newCount+'</span>';
+if(!newCount) msgControls.querySelector('[data-filter="new"]').style.display='none';
+
+let curFilter = 'all';
+
+function applyView(){
+  const order = [...MESSAGES.keys()];
+  if(sortSelect.value==='new'){
+    order.sort((a,b)=>{
+      const da = MESSAGES[a].date||'', db = MESSAGES[b].date||'';
+      if(da!==db) return db.localeCompare(da);      // most recent first
+      return MESSAGES[a].index - MESSAGES[b].index;  // then A–Z
+    });
+  }
+  order.forEach(i=>{
+    const el = document.getElementById(MESSAGES[i].id);
+    messagesGrid.appendChild(el);
+    el.style.display = (curFilter==='all' || MESSAGES[i].isNew) ? '' : 'none';
+  });
+}
+
+function setFilter(f){
+  curFilter = f;
+  chips.forEach(c=>c.classList.toggle('cur', c.dataset.filter===f));
+  applyView();
+}
+
+chips.forEach(c=>c.addEventListener('click',()=>setFilter(c.dataset.filter)));
+sortSelect.addEventListener('change', applyView);
+applyView();
+
 function headerH(){return document.querySelector('.site-head').offsetHeight + document.querySelector('.index-bar').offsetHeight;}
 
 function jumpTo(idx, letter){
+  if(curFilter!=='all'){ setFilter('all'); }
   document.querySelectorAll('.azletter').forEach(b=>b.classList.toggle('cur', b.dataset.letter===letter));
   document.querySelectorAll('.numbtn').forEach(b=>b.classList.toggle('cur', +b.dataset.num===idx));
   const el=document.getElementById(MESSAGES[idx].id);
